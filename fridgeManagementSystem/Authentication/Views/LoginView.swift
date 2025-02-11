@@ -1,8 +1,8 @@
 import SwiftUI
 
-
 struct LoginView: View {
-    @State var viewModel = LoginViewModel()
+    @StateObject private var viewModel = LoginViewModel()
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -64,14 +64,15 @@ struct LoginView: View {
                 }
             }
         }
+        .alert(isPresented: $viewModel.showErrorAlert) {
+            Alert(
+                title: Text("Login Error"),
+                message: Text(viewModel.errorMessage ?? "An unknown error occurred"),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
-    
-  
-    
-    
-    
-    }
-
+}
 
 #Preview {
     LoginView()

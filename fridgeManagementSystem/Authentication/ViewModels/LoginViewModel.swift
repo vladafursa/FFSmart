@@ -1,32 +1,54 @@
 import Foundation
 import Observation
-@Observable
-class LoginViewModel{
-    var email = ""
-    var password = ""
-    
-    func login(){
-        Task{
-            do{
+
+class LoginViewModel: ObservableObject {
+    @Published var email: String = ""
+    @Published var password: String = ""
+    @Published var errorMessage: String?
+    @Published var showErrorAlert: Bool = false
+
+    func login() {
+        print("Login initiated with email: \(email)")
+        Task {
+            do {
                 try await AuthenticationService.shared.login(email: email, password: password)
-            }
-            catch{
-                print(error.localizedDescription)
+                print("Login successful")
+                DispatchQueue.main.async {
+                    self.errorMessage = nil
+                    self.showErrorAlert = false
+                    print("Updated UI: User logged in successfully")
+                }
+            } catch let error as AuthError {
+                print("Login failed with AuthError: \(error.localisedDescription)")
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localisedDescription
+                    self.showErrorAlert = true
+                    print("Updated UI: Error - \(error.localisedDescription)")
+                }
+            } catch {
+                print("Login failed with unknown error: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
+                    self.showErrorAlert = true
+                    print("Updated UI: Error - \(error.localizedDescription)")
+                }
             }
         }
     }
-    
-    
-    func logout(){
-        Task{
-            do{
-                try AuthenticationService.shared.signOut()
-            }
-            catch{
-                print(error.localizedDescription)
+
+        
+        
+        func logout(){
+            Task{
+                do{
+                    try AuthenticationService.shared.signOut()
+                }
+                catch{
+                    print(error.localizedDescription)
+                }
             }
         }
+        
     }
     
-}
 
