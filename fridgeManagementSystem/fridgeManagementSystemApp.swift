@@ -1,14 +1,13 @@
-//
-//  fridgeManagementSystemApp.swift
-//  fridgeManagementSystem
-//
-//  Created by Влада Фурса on 11.02.25.
-//
-
 import SwiftUI
+import Firebase
+
 
 @main
 struct fridgeManagementSystemApp: App {
+    init(){
+           FirebaseApp.configure();
+       }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
