@@ -14,6 +14,7 @@ final class AuthenticationService{
     
     func login(email:String, password:String) async throws{
        let result = try await auth.signIn(withEmail: email, password: password)
+        print(result)
         currentUser=result.user
     }
     

@@ -15,5 +15,18 @@ class LoginViewModel{
             }
         }
     }
+    
+    
+    func logout(){
+        Task{
+            do{
+                try AuthenticationService.shared.signOut()
+            }
+            catch{
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
 }
 
