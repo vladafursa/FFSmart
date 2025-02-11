@@ -1,14 +1,8 @@
 import SwiftUI
-import Firebase
-import FirebaseAuth
+
 
 struct LoginView: View {
-    @State  var email = ""
-    @State  var password = ""
-    @State private var isLoggedIn = false
-    @State private var role = ""
-    @State private var loading = true
-    @State private var showTabView = false
+    @State var viewModel = LoginViewModel()
     var body: some View {
         NavigationStack {
             ZStack {
@@ -26,11 +20,11 @@ struct LoginView: View {
                 
                 VStack(spacing: 15) {
                     VStack(spacing: 35) {
-                        TextField("email", text: $email)
+                        TextField("email", text: $viewModel.email)
                             .font(.title2)
                             .disableAutocorrection(true)
                         
-                        SecureField("password", text: $password)
+                        SecureField("password", text: $viewModel.password)
                             .font(.title2)
                             .disableAutocorrection(true)
                     }
@@ -46,7 +40,7 @@ struct LoginView: View {
                         .padding(.trailing, 50)
                     }
                     
-                    Button(action: {  }) {
+                    Button(action: { viewModel.login() }) {
                         Text("Submit")
                     }
                     .font(.title2)
