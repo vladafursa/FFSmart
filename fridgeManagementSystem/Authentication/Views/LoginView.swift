@@ -2,7 +2,7 @@ import SwiftUI
 
 struct LoginView: View {
     @StateObject private var viewModel = LoginViewModel()
-    
+    @StateObject private var authService = AuthenticationService.shared
     var body: some View {
         NavigationStack {
             ZStack {
@@ -63,6 +63,17 @@ struct LoginView: View {
                     .padding(20)
                 }
             }
+            
+            .navigationDestination(isPresented: $viewModel.isLoggedIn) {
+                if authService.userRole == "admin" {
+                                                                AccessListView()
+                                                                   
+                                                            } else {
+                                                                HomeView(role:authService.userRole ?? "")
+                                                            }
+                            }
+        }.onAppear {
+            viewModel.logout()
         }
         .alert(isPresented: $viewModel.showErrorAlert) {
             Alert(

@@ -103,17 +103,11 @@ struct RegisterView: View {
                         .padding(20)
                 }
             }
-            
-            
-            
-            
-            
-            VStack{
                
                 NavigationLink(destination: LoginView()){
                     
                 }
-            }
+            
         }
     }
 }

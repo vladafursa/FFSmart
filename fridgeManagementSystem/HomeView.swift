@@ -1,29 +1,34 @@
-//
-//  HomeView.swift
-//  fridgeManagementSystem
-//
-//  Created by Влада Фурса on 11.02.25.
-//
-
 import SwiftUI
 
 struct HomeView: View {
-    @State var viewModel = LoginViewModel()
+    var role:String
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-        Button(action: {
-            viewModel.logout()
-                    }) {
-                        Text("Sign Out")
-                            .padding()
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(8.0)
+        TabView {
+                    ListOfFoodItemsView()
+                        .tabItem {
+                            Label("Tab 1", systemImage: "1.square.fill")
+                        }
+                    NewItemView()
+                        .tabItem {
+                            Label("Tab 2", systemImage: "2.square.fill")
+                        }
+                    ChangeQuantityOfFoodItemView()
+                        .tabItem {
+                            Label("Tab 3", systemImage: "3.square.fill")
+                        }
+                    
+                    if role=="head-chef"{
+                        LogHistoryView()
+                            .tabItem {
+                                Label("Tab 4", systemImage: "4.square.fill")
+                            }
                     }
+                    
+                    
                 }
     }
-
+}
 
 #Preview {
-    HomeView()
+    HomeView(role:"head-chef")
 }

@@ -10,12 +10,7 @@ struct fridgeManagementSystemApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if (AuthenticationService.shared.currentUser != nil) {
-                HomeView()
-            }
-            else{
-                LoginView()
-            }
+            ContentView()
         }
     }
 }

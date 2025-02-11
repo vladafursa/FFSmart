@@ -19,15 +19,15 @@ class LogHistoryViewModel:ObservableObject{
                 self.Actions = documents.compactMap { document -> Action? in
                     let data = document.data()
                     
-                    // Debugging output for document data
+                 
                     print("Document Data: \(data)")
                     
                     guard let username = data["username"] as? String,
                           let quantity = data["quantity"] as? Int,
-                          let action = data["action"] as? String, // Assuming you have an "action" field
+                          let action = data["action"] as? String,
                           let name = data["what"] as? String else {
                         print("Missing required fields in document: \(document.documentID)")
-                        return nil // Return nil if fields are missing, this will skip the document
+                        return nil
                     }
                     
                     if let timestamp = data["when"] as? Timestamp {
@@ -55,4 +55,57 @@ class LogHistoryViewModel:ObservableObject{
         
         
     }
+    
+    
+    
+    
+    
+    func findName(completion: @escaping (String?) -> Void) {
+        guard let uid = AuthenticationService.shared.getCurrentUserUID() else {
+            print("No user is currently logged in.")
+            completion(nil)
+            return
+        }
+        
+        let db = Firestore.firestore()
+        let docRef = db.collection("access-list").document(uid)
+        
+        docRef.getDocument { (document, error) in
+            if let error = error {
+                print("Error fetching document: \(error)")
+                completion(nil)
+                return
+            }
+            
+            guard let document = document, document.exists else {
+                print("Document does not exist")
+                completion(nil)
+                return
+            }
+            
+            if let data = document.data(), let name = data["name"] as? String {
+                completion(name)
+            } else {
+                print("Name not found")
+                completion(nil)
+            }
+        }
+    }
+    
+    
+    
+    
+    func addLog(item:FoodItem, action:String){
+            let db = Firestore.firestore();
+            let currentDate=Date()
+            findName { name in
+                if let username = name {
+                    let action = Action(id:UUID().uuidString, username:username, name:item.name, action:action, quantity:item.quantity, time:currentDate)
+                    db.collection("log-history").document().setData(["username":action.username,"action":action.action,"quantity":action.quantity,"what":action.name, "when":action.time]);
+                } else {
+                    print("Name not found or error occurred")
+                }
+            }
+           
+        }
 }

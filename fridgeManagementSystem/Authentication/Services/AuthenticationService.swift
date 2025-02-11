@@ -1,6 +1,6 @@
 import Foundation
 import FirebaseAuth
-
+import Firebase
 enum AuthError: Error {
     case userNotFound
     case incorrectPassword
@@ -23,19 +23,29 @@ enum AuthError: Error {
 
 final class AuthenticationService: ObservableObject {
     @Published var currentUser:FirebaseAuth.User?
+    @Published var userRole: String?
     private let auth=Auth.auth()
     static let shared = AuthenticationService()
     
-    private init(){
-        self.currentUser=auth.currentUser
-    }
+    private var authListener: AuthStateDidChangeListenerHandle?
+       
+       private init() {
+           authListener = Auth.auth().addStateDidChangeListener { _, user in
+               DispatchQueue.main.async {
+                   self.currentUser = user
+                   self.fetchCurrentUserRole()
+               }
+           }
+       }
     
     
     func login(email: String, password: String) async throws {
         do {
             let result = try await auth.signIn(withEmail: email, password: password)
             print("Login Result: \(result)")
-            currentUser = result.user
+            DispatchQueue.main.async {
+                        self.currentUser = result.user
+                    }
         } catch {
             print("Email: \(email), Password: \(password)")
             print("Error Code: \((error as NSError).code)")
@@ -67,13 +77,56 @@ final class AuthenticationService: ObservableObject {
     
     func register(email:String, password:String) async throws{
        let result = try await auth.createUser(withEmail: email, password: password)
-       currentUser=result.user
+       currentUser=nil
     }
     
     func signOut() throws {
         try auth.signOut()
         currentUser=nil
     }
+    func fetchCurrentUserRole() {
+            findRole { [weak self] role in
+                self?.userRole = role
+            }
+        }
     
-}
+    func getCurrentUserUID() -> String? {
+            return currentUser?.uid
+        }
+    
+    
+    
+    func findRole(completion: @escaping (String?) -> Void) {
+        guard let uid = getCurrentUserUID() else {
+            print("No user is currently logged in.")
+            completion(nil)
+            return
+        }
+                let db = Firestore.firestore()
+                let docRef = db.collection("access-list").document(uid)
+                
+                docRef.getDocument { (document, error) in
+                    if let error = error {
+                        print("Error retrieving document: \(error.localizedDescription)")
+                     
+                        return
+                    }
+                    
+                    guard let document = document, document.exists else {
+                        print("No document found, defaulting to admin")
+                        completion("admin")
+                        return
+                    }
+                    
+                    let data = document.data()
+                    let role = (data?["role"] as? String)!
+                    print(role)
+                    completion(role)
+                }
+            }
+        }
+    
+    
+    
+
 

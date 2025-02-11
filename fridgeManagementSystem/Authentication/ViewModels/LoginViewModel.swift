@@ -1,12 +1,11 @@
 import Foundation
 import Observation
-
 class LoginViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var errorMessage: String?
     @Published var showErrorAlert: Bool = false
-
+    @Published var isLoggedIn: Bool = false
     func login() {
         print("Login initiated with email: \(email)")
         Task {
@@ -16,6 +15,7 @@ class LoginViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.errorMessage = nil
                     self.showErrorAlert = false
+                    self.isLoggedIn = true
                     print("Updated UI: User logged in successfully")
                 }
             } catch let error as AuthError {
@@ -23,6 +23,7 @@ class LoginViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.errorMessage = error.localisedDescription
                     self.showErrorAlert = true
+                    self.isLoggedIn = false
                     print("Updated UI: Error - \(error.localisedDescription)")
                 }
             } catch {
@@ -30,25 +31,33 @@ class LoginViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.errorMessage = error.localizedDescription
                     self.showErrorAlert = true
+                    self.isLoggedIn = false
                     print("Updated UI: Error - \(error.localizedDescription)")
                 }
             }
         }
     }
-
-        
-        
-        func logout(){
-            Task{
-                do{
-                    try AuthenticationService.shared.signOut()
-                }
-                catch{
-                    print(error.localizedDescription)
-                }
+    
+    
+    
+    func logout(){
+        Task{
+            do{
+                try AuthenticationService.shared.signOut()
+                self.isLoggedIn = false
+            }
+            catch{
+                print(error.localizedDescription)
             }
         }
-        
     }
+    
+    
+}
+    
+    
+    
+        
+    
     
 

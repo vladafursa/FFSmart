@@ -4,6 +4,7 @@ import Foundation
 import FirebaseAuth
 struct NewItemView: View {
     @StateObject private var newItemViewModel = NewItemViewModel()
+    @StateObject private var logViewModel = LogHistoryViewModel()
     var body: some View {
         
         VStack{
@@ -30,6 +31,7 @@ struct NewItemView: View {
                 let item =  FoodItem(id:UUID().uuidString, name:self.newItemViewModel.name,quantity:self.newItemViewModel.quantity, expirationDate: self.newItemViewModel.date)
                 
                 newItemViewModel.addItem(item: item)
+                logViewModel.addLog(item: item, action: "added")
               
                
             }

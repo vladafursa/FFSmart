@@ -7,7 +7,7 @@ struct AccessListView: View {
     @StateObject private var loginViewModel = LoginViewModel()
     
     var body: some View {
-        NavigationStack{
+      
             ZStack{
                 VStack {
                     List(accessViewModel.users) { user in
@@ -38,10 +38,7 @@ struct AccessListView: View {
             }
             
             NavigationLink(destination: LoginView()) {
-            }
-            .onDisappear {
-                loginViewModel.logout()
-                        }
+            
         }
     }
 }
