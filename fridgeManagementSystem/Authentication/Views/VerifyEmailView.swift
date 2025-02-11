@@ -1,18 +1,64 @@
-//
-//  VerifyEmailView.swift
-//  fridgeManagementSystem
-//
-//  Created by Влада Фурса on 11.02.25.
-//
-
 import SwiftUI
 
 struct VerifyEmailView: View {
+    @State private var email: String = ""
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack{
+            Color("BackgroundColor")
+                .edgesIgnoringSafeArea(.all)
+            
+            VStack{
+                Text("You need to verify email to change password")
+                    .font(.largeTitle)
+                    .foregroundColor(Color("TextColor"))
+                    .bold()
+                    .padding()
+                Spacer()
+                
+            }
+            
+            VStack{
+                
+                VStack{
+                    TextField(
+                        "email",
+                        text: $email
+                        
+                    )
+                    .font(.title2)
+                    .disableAutocorrection(true)
+                }
+                .textFieldStyle(.roundedBorder)
+                .frame(maxWidth: 300)
+               
+                VStack(spacing: 45){
+                    Button(action: verifyEmail) {
+                        
+                    }
+                    
+                    Text("Verify")
+                        .font(.title2)
+                        .foregroundColor(.white)
+                        .bold()
+                        .padding(10)
+                        .frame(maxWidth: 120)
+                        .background(Color("ButtonColor"))
+                        .cornerRadius(5)
+                        .padding(20)
+                }
+            }
+            
+            
+            NavigationLink(destination: LoginView()){
+                
+            }
+        }
     }
 }
 
+func verifyEmail(){
+    
+}
 #Preview {
     VerifyEmailView()
 }
