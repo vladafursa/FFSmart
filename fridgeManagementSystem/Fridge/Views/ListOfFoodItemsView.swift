@@ -3,7 +3,6 @@ import Firebase
 
 
 struct ListOfFoodItemsView: View {
-    @State private var foodItems: [FoodItem] = []
     @StateObject private var listOfFoodItemsViewModel = ListOfFoodItemsViewModel()
     
     
@@ -13,7 +12,7 @@ struct ListOfFoodItemsView: View {
                 VStack(alignment: .leading) {
                     Text("Name: \(item.name)")
                     Text("Quantity: \(item.quantity)")
-                    Text("Expiration Date: \(formattedDate(for: item.expirationDate))")
+                    Text("Expiration Date: \(listOfFoodItemsViewModel.formattedDate(for: item.expirationDate))")
                 }
             }
         }
@@ -22,14 +21,6 @@ struct ListOfFoodItemsView: View {
         }
         
     }
-    
-    func formattedDate(for date: Date) -> String {
-           let dateFormatter = DateFormatter()
-           dateFormatter.dateFormat = "dd-MM-yyyy"
-           return dateFormatter.string(from: date)
-       }
-    
-    
     
 }
 
