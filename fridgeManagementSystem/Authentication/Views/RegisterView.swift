@@ -1,6 +1,7 @@
 import SwiftUI
 import Firebase;
 struct RegisterView: View {
+    @StateObject private var registerViewModel = RegisterViewModel()
     @State private var email: String = ""
     @State private var name: String = ""
     @State private var password: String = ""
@@ -89,7 +90,7 @@ struct RegisterView: View {
                 .frame(maxWidth: 300)
                
                 VStack(spacing: 20){
-                    Button(action: {}) {
+                    Button(action: {registerViewModel.register(email: self.email, name: self.name, password: self.password, role: self.role )}) {
                         Text("Register")
                     }
                         .font(.title2)
