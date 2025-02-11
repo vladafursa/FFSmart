@@ -6,6 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		60D403082D5ADC0600C4D033 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60D403072D5ADC0600C4D033 /* GoogleService-Info.plist */; };
+		60D4030B2D5ADC5E00C4D033 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 60D4030A2D5ADC5E00C4D033 /* FirebaseAuth */; };
+		60D4030D2D5ADC5E00C4D033 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 60D4030C2D5ADC5E00C4D033 /* FirebaseCore */; };
+		60D4030F2D5ADC5E00C4D033 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 60D4030E2D5ADC5E00C4D033 /* FirebaseDatabase */; };
+		60D403112D5ADC5E00C4D033 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 60D403102D5ADC5E00C4D033 /* FirebaseFirestore */; };
+		60D403132D5ADC5E00C4D033 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 60D403122D5ADC5E00C4D033 /* FirebaseStorage */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		60D402EB2D5AD9CC00C4D033 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +36,7 @@
 		60D402DA2D5AD9C900C4D033 /* fridgeManagementSystem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fridgeManagementSystem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60D402EA2D5AD9CC00C4D033 /* fridgeManagementSystemTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fridgeManagementSystemTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		60D402F42D5AD9CC00C4D033 /* fridgeManagementSystemUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fridgeManagementSystemUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		60D403072D5ADC0600C4D033 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -52,6 +62,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60D4030F2D5ADC5E00C4D033 /* FirebaseDatabase in Frameworks */,
+				60D403112D5ADC5E00C4D033 /* FirebaseFirestore in Frameworks */,
+				60D4030D2D5ADC5E00C4D033 /* FirebaseCore in Frameworks */,
+				60D403132D5ADC5E00C4D033 /* FirebaseStorage in Frameworks */,
+				60D4030B2D5ADC5E00C4D033 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +90,7 @@
 		60D402D12D5AD9C900C4D033 = {
 			isa = PBXGroup;
 			children = (
+				60D403072D5ADC0600C4D033 /* GoogleService-Info.plist */,
 				60D402DC2D5AD9C900C4D033 /* fridgeManagementSystem */,
 				60D402ED2D5AD9CC00C4D033 /* fridgeManagementSystemTests */,
 				60D402F72D5AD9CC00C4D033 /* fridgeManagementSystemUITests */,
@@ -112,6 +128,11 @@
 			);
 			name = fridgeManagementSystem;
 			packageProductDependencies = (
+				60D4030A2D5ADC5E00C4D033 /* FirebaseAuth */,
+				60D4030C2D5ADC5E00C4D033 /* FirebaseCore */,
+				60D4030E2D5ADC5E00C4D033 /* FirebaseDatabase */,
+				60D403102D5ADC5E00C4D033 /* FirebaseFirestore */,
+				60D403122D5ADC5E00C4D033 /* FirebaseStorage */,
 			);
 			productName = fridgeManagementSystem;
 			productReference = 60D402DA2D5AD9C900C4D033 /* fridgeManagementSystem.app */;
@@ -195,6 +216,9 @@
 			);
 			mainGroup = 60D402D12D5AD9C900C4D033;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				60D403092D5ADC5E00C4D033 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 60D402DB2D5AD9C900C4D033 /* Products */;
 			projectDirPath = "";
@@ -212,6 +236,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60D403082D5ADC0600C4D033 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -558,6 +583,45 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		60D403092D5ADC5E00C4D033 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.8.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		60D4030A2D5ADC5E00C4D033 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60D403092D5ADC5E00C4D033 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		60D4030C2D5ADC5E00C4D033 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60D403092D5ADC5E00C4D033 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		60D4030E2D5ADC5E00C4D033 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60D403092D5ADC5E00C4D033 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		60D403102D5ADC5E00C4D033 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60D403092D5ADC5E00C4D033 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		60D403122D5ADC5E00C4D033 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60D403092D5ADC5E00C4D033 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 60D402D22D5AD9C900C4D033 /* Project object */;
 }
