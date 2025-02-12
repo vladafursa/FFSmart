@@ -5,8 +5,6 @@ class ListOfFoodItemsViewModel:ObservableObject{
     @Published var foodItems: [FoodItem] = []
     @Published var errorMessage: String?
     
-    
-    
     func listenForFoodItemUpdates() {
         FoodItemService.shared.addListenerForFoodItemsUpdates() { [weak self] result in
             DispatchQueue.main.async {

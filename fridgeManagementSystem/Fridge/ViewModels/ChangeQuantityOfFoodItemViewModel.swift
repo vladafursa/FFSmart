@@ -3,37 +3,21 @@ import Observation
 import Firebase
 class ChangeQuantityOfFoodItemViewModel:ObservableObject{
     @Published var foodItems: [FoodItem] = []
+    @Published var errorMessage: String?
     
     func listenForFoodItemUpdates() {
-        let db = Firestore.firestore()
-        
-        db.collection("food-items").addSnapshotListener { snapshot, error in
-            if let error = error {
-                print("Error fetching documents: \(error)")
-                return
-            }
-            
-            guard let documents = snapshot?.documents else { return }
-            
+        FoodItemService.shared.addListenerForFoodItemsUpdates() { [weak self] result in
             DispatchQueue.main.async {
-                self.foodItems = documents.compactMap { document in
-                    let data = document.data()
-                    guard let name = data["name"] as? String,
-                          let quantity = data["quantity"] as? Int,
-                          let expirationDateTimestamp = data["expiration-date"] as? Timestamp else {
-                        return nil
-                    }
-                    
-                    
-                    let expirationDate = expirationDateTimestamp.dateValue()
-                    
-                    return FoodItem(id: document.documentID, name: name, quantity: quantity, expirationDate: expirationDate)
+                            switch result {
+                            case .success(let items):
+                                self?.foodItems = items
+                            case .failure(let error):
+                                self?.errorMessage = "Failed to fetch food items: \(error.localizedDescription)"
+                                print("Error: \(error)")
+                            }
                 }
-            }
         }
     }
-    
-    
     
     
     func deleteItem(id: String) {

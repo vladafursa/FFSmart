@@ -28,5 +28,15 @@ final class FoodItemService {
     }
     
     
+    func addItem(item:FoodItem) async throws {
+        do{
+            try await db.collection("food-items").document().setData(["name":item.name, "quantity":item.quantity, "expiration-date":item.expirationDate]);
+        }
+        catch{
+            throw error
+        }
+    }
+
+    
     
 }
