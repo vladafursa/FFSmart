@@ -82,7 +82,9 @@ struct LoginView: View {
                 message: Text(viewModel.errorMessage ?? "An unknown error occurred"),
                 dismissButton: .default(Text("try again"))
             )
+            
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

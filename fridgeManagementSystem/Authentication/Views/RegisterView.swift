@@ -111,25 +111,20 @@ struct RegisterView: View {
             
         }
         
-        .alert(isPresented: $registerViewModel.showErrorAlert) {
-                    Alert(
-                        title: Text("Unsuccessful registration"),
-                        message: Text(registerViewModel.errorMessage ?? "An unknown error occurred"),
-                        dismissButton: .default(Text("try again"))
-                    )
-                }
+        .alert(isPresented: $registerViewModel.showAlert) {
+            Alert(
+                title: Text(registerViewModel.alertTitle),
+                message: Text(registerViewModel.alertMessage),
+                dismissButton: .default(Text(registerViewModel.dismissMessage))
+            )
+        }
         
         
-        .alert(isPresented: $registerViewModel.showSuccessAlert) {
-                    Alert(
-                        title: Text("Registration request submitted"),
-                        message: Text("Your registration request was submitted for admin's consideration"),
-                        dismissButton: .default(Text("OK"))
-                    )
-                }
+        
         NavigationLink(destination: LoginView(), isActive: $registerViewModel.submitedRegisterRequest) {
             EmptyView()
                        }
+        
         
     }
 }
