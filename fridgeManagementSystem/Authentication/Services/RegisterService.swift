@@ -62,7 +62,5 @@ final class RegisterService {
             return false
         }
     }
-    
-    
 }
 
