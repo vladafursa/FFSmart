@@ -1,4 +1,17 @@
 import Firebase
+
+
+
+enum itemError: Error {
+    case sameItemAlreadyExists
+    var localisedDescription: String {
+        switch self {
+        case .sameItemAlreadyExists:
+            return "Same item already exists: either change the quality or provide a new name"
+        }
+    }
+}
+
 final class FoodItemService {
     private let db = Firestore.firestore()
     static let shared = FoodItemService()
@@ -30,13 +43,31 @@ final class FoodItemService {
     
     func addItem(item:FoodItem) async throws {
         do{
-            try await db.collection("food-items").document().setData(["name":item.name, "quantity":item.quantity, "expiration-date":item.expirationDate]);
+            let exists = try await checkIfFoodItemExists(name: item.name, expirationDate: item.expirationDate)
+            if exists{
+                throw itemError.sameItemAlreadyExists
+            }
+            else{
+                try await db.collection("food-items").document().setData(["name":item.name, "quantity":item.quantity, "expiration-date":item.expirationDate]);
+            }
         }
         catch{
             throw error
         }
     }
-
     
     
+    func checkIfFoodItemExists(name: String, expirationDate: Date) async throws -> Bool {
+        let query =
+           db.collection("food-items")
+               .whereField("name", isEqualTo: name)
+               .whereField("expiration-date", isEqualTo: expirationDate)
+        do{
+            let snapshot = try await query.getDocuments()
+            return !snapshot.documents.isEmpty
+        }
+        catch{
+            return false
+        }
+       }
 }

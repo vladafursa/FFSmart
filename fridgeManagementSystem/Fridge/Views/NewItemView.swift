@@ -10,8 +10,6 @@ struct NewItemView: View {
             Color("BackgroundColor")
                 .edgesIgnoringSafeArea(.all)
             
-            
-            
                  VStack{
                             Text("New item")
                                 .font(.largeTitle)
@@ -57,6 +55,9 @@ struct NewItemView: View {
                         .foregroundColor(Color("TextColor"))
                         .font(.title2)
                     DatePicker("", selection: $newItemViewModel.date, displayedComponents: .date)
+                        .onChange(of: newItemViewModel.date) { newDate in
+                                            newItemViewModel.setMidnightDate(newDate)
+                                        }
                         .frame(maxWidth: .infinity, alignment: .center)
                         .labelsHidden()
                         .datePickerStyle(.compact)
@@ -88,7 +89,7 @@ struct NewItemView: View {
         .alert(isPresented: $newItemViewModel.showAlert) {
                     Alert(
                         title: Text(newItemViewModel.alertTitle),
-                        message: Text(newItemViewModel.alertMessage),
+                        message: Text(newItemViewModel.alertMessage!),
                         dismissButton: .default(Text(newItemViewModel.dismissMessage))
                     )
                 }

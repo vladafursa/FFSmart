@@ -3,18 +3,14 @@ import Observation
 import Firebase
 
 enum itemFormError: Error {
-    case alreadyExistItem
     case emptyField
-    case invalidValue
-    
+    case invalidNumber
     var localisedDescription: String {
         switch self {
-        case .alreadyExistItem:
-            return "Same item already exists: either change quality of it or provide another name"
-        case .invalidValue:
-            return "quality should be a number"
         case .emptyField:
             return "All fields should be filled"
+        case .invalidNumber:
+            return "provide number that is greater than zero"
         }
     }
 }
@@ -27,7 +23,7 @@ class NewItemViewModel:ObservableObject{
     @Published var date=Date()
     @Published var showAlert = false
     @Published var alertTitle: String = ""
-    @Published var alertMessage: String = ""
+    @Published var alertMessage: String?
     @Published var dismissMessage: String = ""
     func addItem(item:FoodItem){
         let db = Firestore.firestore();
@@ -39,23 +35,13 @@ class NewItemViewModel:ObservableObject{
         if name.isEmpty || String(quantity).isEmpty{
             throw itemFormError.emptyField
         }
+        else if quantity<=0{
+            throw itemFormError.invalidNumber
+        }
     }
     
-    /*func validateForm() throws{
-            if email.isEmpty || name.isEmpty || password.isEmpty || repeatedPassword.isEmpty || role.isEmpty{
-                throw formError.emptyField
-            }
-            else if !isValidEmail(email){
-                throw formError.invalidEmail
-            }
-            else if password.count < 6{
-                throw formError.shortPassword
-            }
-            else if password != repeatedPassword{
-                throw formError.differentRepeatPassword
-            }
-        }
-    */
+    
+    
     
     func addNewItem(){
         Task{
@@ -65,8 +51,23 @@ class NewItemViewModel:ObservableObject{
                                    self.showSuccessAlert()
                                }
             }
+            catch let error as itemFormError {
+                            DispatchQueue.main.async {
+                                self.alertMessage = error.localisedDescription
+                                self.showErrorAlert (message:self.alertMessage!)
+                            }
+                        }
+            catch let error as itemError {
+                            DispatchQueue.main.async {
+                                self.alertMessage = error.localisedDescription
+                                self.showErrorAlert (message:self.alertMessage!)
+                            }
+                        }
             catch{
-                
+                DispatchQueue.main.async {
+                    self.alertMessage = error.localizedDescription
+                    self.showErrorAlert (message:self.alertMessage ?? "Unknown error occured")
+                }
             }
         }
     }
@@ -80,10 +81,19 @@ class NewItemViewModel:ObservableObject{
         }
        
         func showErrorAlert(message: String){
-            self.alertTitle = "Unsuccessful registration"
+            self.alertTitle = "Couldn't add an item"
             self.alertMessage = message
             self.showAlert = true
             self.dismissMessage = "try again"
         }
+    
+    
+    func setMidnightDate(_ date: Date) {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day], from: date)
+        if let midnightDate = calendar.date(from: components) {
+            self.date = midnightDate
+        }
+    }
     
 }
