@@ -68,7 +68,7 @@ struct RegisterView: View {
                     .font(.title2)
                     .disableAutocorrection(true)
                     .autocapitalization(.none)
-                    TextField(
+                     SecureField(
                         "password",
                         text: $registerViewModel.password
                         
@@ -76,7 +76,7 @@ struct RegisterView: View {
                     .font(.title2)
                     .disableAutocorrection(true)
                     .autocapitalization(.none)
-                    TextField(
+                    SecureField(
                         "repeat password",
                         text: $registerViewModel.repeatedPassword
                         
