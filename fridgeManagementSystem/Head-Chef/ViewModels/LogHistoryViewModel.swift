@@ -94,6 +94,38 @@ class LogHistoryViewModel:ObservableObject{
     
     
     
+    private var logWorkItem: DispatchWorkItem?
+    private var accumulatedDifferences: [String: Int] = [:]
+    
+    func addLogAfterDelay(item: FoodItem, difference: Int, action: String, delay: TimeInterval = 1.0) {
+        print("Scheduling log for item: \(item.name), action: \(action), with delay: \(delay) seconds")
+        
+        logWorkItem?.cancel() // Отменяем предыдущий logWorkItem
+        
+        // Накопление разницы для каждого товара
+        if let currentDifference = accumulatedDifferences[item.id] {
+            accumulatedDifferences[item.id] = currentDifference + difference
+        } else {
+            accumulatedDifferences[item.id] = difference
+        }
+        
+        logWorkItem = DispatchWorkItem { [weak self] in
+            guard let self = self else { return }
+            if let finalDifference = self.accumulatedDifferences[item.id] {
+                let updatedItem = FoodItem(id: item.id, name: item.name, quantity: abs(finalDifference), expirationDate: item.expirationDate)
+                let finalAction = finalDifference < 0 ? "removed" : "inserted"
+                self.addLog(item: updatedItem, action: finalAction)
+                // Сброс накопленных изменений для этого товара
+                self.accumulatedDifferences[item.id] = nil
+            }
+        }
+        
+        if let logWorkItem = logWorkItem {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: logWorkItem)
+        } else {
+            print("Failed to create DispatchWorkItem")
+        }
+    }
     
     func addLog(item:FoodItem, action:String){
             let db = Firestore.firestore();
@@ -108,4 +140,9 @@ class LogHistoryViewModel:ObservableObject{
             }
            
         }
+    
+    
+    
+    
+    
 }

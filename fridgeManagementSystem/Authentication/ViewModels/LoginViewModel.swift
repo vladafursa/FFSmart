@@ -6,6 +6,7 @@ class LoginViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var showErrorAlert: Bool = false
     @Published var isLoggedIn: Bool = false
+    
     func login() {
         print("Login initiated with email: \(email)")
         Task {
