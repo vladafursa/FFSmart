@@ -23,10 +23,11 @@ struct LoginView: View {
                         TextField("email", text: $viewModel.email)
                             .font(.title2)
                             .disableAutocorrection(true)
-                        
+                            .autocapitalization(.none)
                         SecureField("password", text: $viewModel.password)
                             .font(.title2)
                             .disableAutocorrection(true)
+                            .autocapitalization(.none)
                     }
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 300)

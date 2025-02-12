@@ -1,6 +1,7 @@
 import Foundation
 import FirebaseAuth
 import Firebase
+//customised errors
 enum AuthError: Error {
     case userNotFound
     case incorrectPassword
@@ -81,6 +82,7 @@ final class AuthenticationService: ObservableObject {
         try auth.signOut()
         DispatchQueue.main.async {
             self.currentUser=nil
+            self.userRole = nil 
         }
     }
     

@@ -46,13 +46,23 @@ class LoginViewModel: ObservableObject {
         Task{
             do{
                 try AuthenticationService.shared.signOut()
-                self.isLoggedIn = false
+                DispatchQueue.main.async {
+                    self.isLoggedIn = false
+                    self.errorMessage = nil
+                    self.showErrorAlert = false
+                }
             }
             catch{
-                print(error.localizedDescription)
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
+                    self.showErrorAlert = true
+                }
             }
         }
     }
+    
+    
+    
     
     func resetPassword(email: String){
         Task{
