@@ -93,7 +93,6 @@ final class AuthenticationService: ObservableObject {
             try await auth.sendPasswordReset(withEmail: email)
         }
         catch{
-            
             let nsError = error as NSError
             if let errorCode = AuthErrorCode(rawValue: nsError.code) {
                 print("Mapped Firebase Auth Error Code: \(errorCode.code)")
