@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct VerifyEmailView: View {
+    @StateObject private var viewModel = LoginViewModel()
     @State private var email: String = ""
     var body: some View {
         ZStack{
@@ -32,19 +33,18 @@ struct VerifyEmailView: View {
                 .frame(maxWidth: 300)
                
                 VStack(spacing: 45){
-                    Button(action: verifyEmail) {
-                        
+                    Button(action: {viewModel.resetPassword(email: email)}) {
+                        Text("Verify")
+                            .font(.title2)
+                            .foregroundColor(.white)
+                            .bold()
+                            .padding(10)
+                            .frame(maxWidth: 120)
+                            .background(Color("ButtonColor"))
+                            .cornerRadius(5)
+                            .padding(20)
                     }
-                    
-                    Text("Verify")
-                        .font(.title2)
-                        .foregroundColor(.white)
-                        .bold()
-                        .padding(10)
-                        .frame(maxWidth: 120)
-                        .background(Color("ButtonColor"))
-                        .cornerRadius(5)
-                        .padding(20)
+                        
                 }
             }
             
@@ -56,9 +56,7 @@ struct VerifyEmailView: View {
     }
 }
 
-func verifyEmail(){
-    
-}
+
 #Preview {
     VerifyEmailView()
 }

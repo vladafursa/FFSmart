@@ -28,15 +28,15 @@ final class AuthenticationService: ObservableObject {
     static let shared = AuthenticationService()
     
     private var authListener: AuthStateDidChangeListenerHandle?
-       
-       private init() {
-           authListener = Auth.auth().addStateDidChangeListener { _, user in
-               DispatchQueue.main.async {
-                   self.currentUser = user
-                   self.fetchCurrentUserRole()
-               }
-           }
-       }
+    
+    private init() {
+        authListener = Auth.auth().addStateDidChangeListener { _, user in
+            DispatchQueue.main.async {
+                self.currentUser = user
+                self.fetchCurrentUserRole()
+            }
+        }
+    }
     
     
     func login(email: String, password: String) async throws {
@@ -44,13 +44,12 @@ final class AuthenticationService: ObservableObject {
             let result = try await auth.signIn(withEmail: email, password: password)
             print("Login Result: \(result)")
             DispatchQueue.main.async {
-                        self.currentUser = result.user
-                    }
+                self.currentUser = result.user
+            }
         } catch {
             print("Email: \(email), Password: \(password)")
             print("Error Code: \((error as NSError).code)")
             
-            // Use NSError domain and code for detailed debugging
             let nsError = error as NSError
             print("NSError Domain: \(nsError.domain), Code: \(nsError.code)")
             
@@ -61,38 +60,44 @@ final class AuthenticationService: ObservableObject {
                     throw AuthError.userNotFound
                 case .networkError:
                     throw AuthError.networkError
-                case .invalidCredential:
-                    throw AuthError.incorrectPassword
-                case .wrongPassword:
+                case .wrongPassword, .invalidCredential:
                     throw AuthError.incorrectPassword
                 default:
                     throw AuthError.unknownError
                 }
-            } else {
+            } else{
                 throw AuthError.unknownError
             }
         }
     }
-        
+    
     
     func register(email:String, password:String) async throws{
-       let result = try await auth.createUser(withEmail: email, password: password)
-       currentUser=nil
+        let result = try await auth.createUser(withEmail: email, password: password)
+        currentUser=nil
     }
     
     func signOut() throws {
         try auth.signOut()
-        currentUser=nil
-    }
-    func fetchCurrentUserRole() {
-            findRole { [weak self] role in
-                self?.userRole = role
-            }
+        DispatchQueue.main.async {
+            self.currentUser=nil
         }
+    }
+    
+    
+    func forgotPassword(email: String) async throws{
+        try await auth.sendPasswordReset(withEmail: email)
+    }
+    
+    func fetchCurrentUserRole() {
+        findRole { [weak self] role in
+            self?.userRole = role
+        }
+    }
     
     func getCurrentUserUID() -> String? {
-            return currentUser?.uid
-        }
+        return currentUser?.uid
+    }
     
     
     
@@ -102,31 +107,29 @@ final class AuthenticationService: ObservableObject {
             completion(nil)
             return
         }
-                let db = Firestore.firestore()
-                let docRef = db.collection("access-list").document(uid)
+        let db = Firestore.firestore()
+        let docRef = db.collection("access-list").document(uid)
+        
+        docRef.getDocument { (document, error) in
+            if let error = error {
+                print("Error retrieving document: \(error.localizedDescription)")
                 
-                docRef.getDocument { (document, error) in
-                    if let error = error {
-                        print("Error retrieving document: \(error.localizedDescription)")
-                     
-                        return
-                    }
-                    
-                    guard let document = document, document.exists else {
-                        print("No document found, defaulting to admin")
-                        completion("admin")
-                        return
-                    }
-                    
-                    let data = document.data()
-                    let role = (data?["role"] as? String)!
-                    print(role)
-                    completion(role)
-                }
+                return
             }
+            
+            guard let document = document, document.exists else {
+                print("No document found, defaulting to admin")
+                completion("admin")
+                return
+            }
+            
+            let data = document.data()
+            let role = (data?["role"] as? String)!
+            print(role)
+            completion(role)
         }
+    }
     
     
-    
-
+}
 

@@ -19,7 +19,6 @@ struct ListOfFoodItemsView: View {
                     listOfFoodItemsViewModel.sortFoodItemsByAlphabet()
                 } label: {
                     Text("by alphabet")
-                    
                 }
                 Button {
                     listOfFoodItemsViewModel.sortFoodItemsByQuantity()

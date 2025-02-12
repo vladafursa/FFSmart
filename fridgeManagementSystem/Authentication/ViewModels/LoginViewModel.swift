@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+
 class LoginViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
@@ -46,6 +47,17 @@ class LoginViewModel: ObservableObject {
             do{
                 try AuthenticationService.shared.signOut()
                 self.isLoggedIn = false
+            }
+            catch{
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func resetPassword(email: String){
+        Task{
+            do{
+                try await AuthenticationService.shared.forgotPassword(email: email)
             }
             catch{
                 print(error.localizedDescription)

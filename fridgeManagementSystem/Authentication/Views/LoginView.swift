@@ -66,20 +66,20 @@ struct LoginView: View {
             
             .navigationDestination(isPresented: $viewModel.isLoggedIn) {
                 if authService.userRole == "admin" {
-                                                                AccessListView()
-                                                                   
-                                                            } else {
-                                                                HomeView(role:authService.userRole ?? "")
-                                                            }
-                            }
+                                    AccessListView()
+                                } else {
+                                    HomeView(role:authService.userRole ?? "")
+                                }
+                }
+       
         }.onAppear {
             viewModel.logout()
         }
         .alert(isPresented: $viewModel.showErrorAlert) {
             Alert(
-                title: Text("Login Error"),
+                title: Text("Unsuccessful login"),
                 message: Text(viewModel.errorMessage ?? "An unknown error occurred"),
-                dismissButton: .default(Text("OK"))
+                dismissButton: .default(Text("try again"))
             )
         }
     }
