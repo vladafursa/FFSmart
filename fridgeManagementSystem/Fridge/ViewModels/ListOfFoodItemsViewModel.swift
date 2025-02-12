@@ -38,6 +38,16 @@ class ListOfFoodItemsViewModel:ObservableObject{
            dateFormatter.dateFormat = "dd-MM-yyyy"
            return dateFormatter.string(from: date)
        }
+    func sortFoodItemsByExpirationDate() {
+            self.foodItems.sort { $0.expirationDate < $1.expirationDate }
+        }
+    func sortFoodItemsByAlphabet() {
+            self.foodItems.sort { $0.name < $1.name }
+        }
+    
+    func sortFoodItemsByQuantity() {
+            self.foodItems.sort { $0.quantity < $1.quantity }
+        }
     
 }
     
