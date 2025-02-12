@@ -89,7 +89,7 @@ struct RegisterView: View {
                 .frame(maxWidth: 300)
                
                 VStack(spacing: 20){
-                    Button(action: {registerViewModel.register(email: self.registerViewModel.email, name: self.registerViewModel.name, password: self.registerViewModel.password, role: self.registerViewModel.role )}) {
+                    Button(action: {registerViewModel.registerUser()}) {
                         Text("Register")
                     }
                         .font(.title2)
@@ -107,7 +107,30 @@ struct RegisterView: View {
                     
                 }
             
+            
+            
         }
+        
+        .alert(isPresented: $registerViewModel.showErrorAlert) {
+                    Alert(
+                        title: Text("Unsuccessful registration"),
+                        message: Text(registerViewModel.errorMessage ?? "An unknown error occurred"),
+                        dismissButton: .default(Text("try again"))
+                    )
+                }
+        
+        
+        .alert(isPresented: $registerViewModel.showSuccessAlert) {
+                    Alert(
+                        title: Text("Registration request submitted"),
+                        message: Text("Your registration request was submitted for admin's consideration"),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
+        NavigationLink(destination: LoginView(), isActive: $registerViewModel.submitedRegisterRequest) {
+            EmptyView()
+                       }
+        
     }
 }
 

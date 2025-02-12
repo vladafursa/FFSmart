@@ -7,9 +7,32 @@ class RegisterViewModel:ObservableObject{
     @Published var password: String = ""
     @Published var repeatedPassword: String = ""
     @Published var role: String = ""
-    func register(email:String, name:String, password:String, role:String){
-        let db = Firestore.firestore();
-        db.collection("requests").document().setData(["email":email, "name":name, "password":password, "role":role]);
+    @Published var errorMessage: String?
+    @Published var showErrorAlert: Bool = false
+    @Published var showSuccessAlert: Bool = false
+    @Published var submitedRegisterRequest: Bool = false
+    
+    func registerUser(){
+        Task{
+            do{
+                try await RegisterService.shared.register(email: email, name: name, password: password, role: role)
+                DispatchQueue.main.async {
+                    self.errorMessage = nil
+                    self.showErrorAlert = false
+                    self.showSuccessAlert = true
+                    self.submitedRegisterRequest = true
+                }
+            }
+            catch{
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
+                    self.showErrorAlert = true
+                    self.showSuccessAlert = false
+                    self.submitedRegisterRequest = false
+                }
+            }
+        }
     }
+    
 }
     
