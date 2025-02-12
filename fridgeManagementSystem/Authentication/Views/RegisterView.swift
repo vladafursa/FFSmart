@@ -2,11 +2,7 @@ import SwiftUI
 import Firebase;
 struct RegisterView: View {
     @StateObject private var registerViewModel = RegisterViewModel()
-    @State private var email: String = ""
-    @State private var name: String = ""
-    @State private var password: String = ""
-    @State private var repeatedPassword: String = ""
-    @State private var role: String = ""
+    @State private var selectedRole: String = "role"
     var body: some View {
         
         ZStack{
@@ -29,23 +25,25 @@ struct RegisterView: View {
                     
                     TextField(
                         "name",
-                        text: $name
+                        text: $registerViewModel.name
                         
                     )
                     .font(.title2)
                     .disableAutocorrection(true)
-                    
+                    .autocapitalization(.none)
                     
                         Menu {
                             Button("chef") {
-                                role="chef"
+                                registerViewModel.role="chef"
+                                selectedRole=registerViewModel.role
                             }
                             Button("head-chef") {
-                                role="head-chef"
+                                registerViewModel.role="head-chef"
+                                selectedRole=registerViewModel.role
                             }
                         }label: {
                             HStack {
-                                Text("role")
+                                Text(selectedRole)
                                     .foregroundColor(.gray)
                                 Spacer()
                                 Image(systemName: "chevron.down")
@@ -64,33 +62,34 @@ struct RegisterView: View {
                     
                     TextField(
                         "email",
-                        text: $email
+                        text: $registerViewModel.email
                         
                     )
                     .font(.title2)
                     .disableAutocorrection(true)
-                    
+                    .autocapitalization(.none)
                     TextField(
                         "password",
-                        text: $password
+                        text: $registerViewModel.password
                         
                     )
                     .font(.title2)
                     .disableAutocorrection(true)
-                    
+                    .autocapitalization(.none)
                     TextField(
                         "repeat password",
-                        text: $repeatedPassword
+                        text: $registerViewModel.repeatedPassword
                         
                     )
                     .font(.title2)
                     .disableAutocorrection(true)
+                    .autocapitalization(.none)
                 }
                 .textFieldStyle(.roundedBorder)
                 .frame(maxWidth: 300)
                
                 VStack(spacing: 20){
-                    Button(action: {registerViewModel.register(email: self.email, name: self.name, password: self.password, role: self.role )}) {
+                    Button(action: {registerViewModel.register(email: self.registerViewModel.email, name: self.registerViewModel.name, password: self.registerViewModel.password, role: self.registerViewModel.role )}) {
                         Text("Register")
                     }
                         .font(.title2)
