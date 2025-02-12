@@ -88,7 +88,27 @@ final class AuthenticationService: ObservableObject {
     
     
     func forgotPassword(email: String) async throws{
-        try await auth.sendPasswordReset(withEmail: email)
+        do{
+            
+            try await auth.sendPasswordReset(withEmail: email)
+        }
+        catch{
+            
+            let nsError = error as NSError
+            if let errorCode = AuthErrorCode(rawValue: nsError.code) {
+                print("Mapped Firebase Auth Error Code: \(errorCode.code)")
+                switch errorCode.code {
+                case .userNotFound:
+                    throw AuthError.userNotFound
+                case .networkError:
+                    throw AuthError.networkError
+                default:
+                    throw AuthError.unknownError
+                }
+            } else{
+                throw AuthError.unknownError
+            }
+        }
     }
     
     func fetchCurrentUserRole() {

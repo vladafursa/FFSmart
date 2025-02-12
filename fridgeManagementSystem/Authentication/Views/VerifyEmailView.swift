@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct VerifyEmailView: View {
-    @StateObject private var viewModel = LoginViewModel()
-    @State private var email: String = ""
+    @StateObject private var verifyEmailViewModel = VerifyEmailViewModel()
     var body: some View {
         ZStack{
             Color("BackgroundColor")
@@ -23,17 +22,18 @@ struct VerifyEmailView: View {
                 VStack{
                     TextField(
                         "email",
-                        text: $email
+                        text: $verifyEmailViewModel.email
                         
                     )
                     .font(.title2)
                     .disableAutocorrection(true)
+                    .autocapitalization(.none)
                 }
                 .textFieldStyle(.roundedBorder)
                 .frame(maxWidth: 300)
                
                 VStack(spacing: 45){
-                    Button(action: {viewModel.resetPassword(email: email)}) {
+                    Button(action: {verifyEmailViewModel.resetPassword()}) {
                         Text("Verify")
                             .font(.title2)
                             .foregroundColor(.white)
@@ -53,6 +53,23 @@ struct VerifyEmailView: View {
                 
             }
         }
+        
+        
+        
+        .alert(isPresented: $verifyEmailViewModel.showAlert) {
+            Alert(
+                title: Text(verifyEmailViewModel.alertTitle),
+                message: Text(verifyEmailViewModel.alertMessage),
+                dismissButton: .default(Text(verifyEmailViewModel.dismissMessage))
+            )
+        }
+        
+        
+        
+        NavigationLink(destination: LoginView(), isActive: $verifyEmailViewModel.verificationLinkSent) {
+            EmptyView()
+                       }
+        
     }
 }
 
