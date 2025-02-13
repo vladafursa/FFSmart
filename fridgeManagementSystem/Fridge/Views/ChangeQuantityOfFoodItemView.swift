@@ -23,7 +23,7 @@ struct ChangeQuantityOfFoodItemView: View {
                             VStack{
                                 Text("\(foodItem.name)")
                                     .foregroundColor(Color("TextColor"))
-                                Text("\(formattedDate(for: foodItem.expirationDate))")
+                                Text("\(changeItemViewModel.formattedDate(for: foodItem.expirationDate))")
                                     .foregroundColor(Color("TextColor"))
                             }
                             HStack{
@@ -86,13 +86,16 @@ struct ChangeQuantityOfFoodItemView: View {
         .onAppear {
             changeItemViewModel.listenForFoodItemUpdates()
         }
+        .alert(isPresented: $changeItemViewModel.showErrorAlert) {
+            Alert(
+                title: Text("Couldn't perform changes"),
+                message: Text(changeItemViewModel.errorMessage ?? "An unknown error occurred"),
+                dismissButton: .default(Text("try again"))
+            )
+        }
     }
     
-    func formattedDate(for date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd-MM-yyyy"
-        return dateFormatter.string(from: date)
-    }
+    
 }
 
 #Preview {

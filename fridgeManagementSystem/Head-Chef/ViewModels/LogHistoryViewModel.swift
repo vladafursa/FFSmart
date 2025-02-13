@@ -4,15 +4,18 @@ import Firebase
 class LogHistoryViewModel:ObservableObject{
     @Published var Actions: [Action] = []
     @Published var errorMessage: String?
-    
+    @Published var showErrorAlert: Bool = false
     func listenForNewActionUpdates() {
         LogService.shared.addListenerForActionUpdates { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let items):
                     self?.Actions = items
+                    self!.errorMessage = nil
+                    self!.showErrorAlert = false
                 case .failure(let error):
                     self?.errorMessage = "Failed to fetch actions: \(error.localizedDescription)"
+                    self!.showErrorAlert = true
                     print("Error: \(error)")
                 }
             }

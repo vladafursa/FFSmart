@@ -98,6 +98,13 @@ struct ListOfFoodItemsView: View {
         .onAppear {
             listOfFoodItemsViewModel.listenForFoodItemUpdates()
         }
+        .alert(isPresented: $listOfFoodItemsViewModel.showErrorAlert) {
+            Alert(
+                title: Text("Couldn't load items"),
+                message: Text(listOfFoodItemsViewModel.errorMessage ?? "An unknown error occurred"),
+                dismissButton: .default(Text("try again"))
+            )
+        }
         
     }
     

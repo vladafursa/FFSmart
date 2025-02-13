@@ -62,6 +62,13 @@ struct AccessListView: View {
         .onAppear {
             accessViewModel.listenForAccessListUpdates()
         }
+        .alert(isPresented: $accessViewModel.showErrorAlert) {
+            Alert(
+                title: Text("Something went wrong"),
+                message: Text(accessViewModel.errorMessage ?? "An unknown error occurred"),
+                dismissButton: .default(Text("try again"))
+            )
+        }
     }
 }
 

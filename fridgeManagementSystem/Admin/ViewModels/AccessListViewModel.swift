@@ -4,6 +4,8 @@ import Firebase
 class AccessListViewModel: ObservableObject{
     @Published var users: [User] = []
     @Published var errorMessage: String?
+    @Published var showErrorAlert: Bool = false
+    
     private let db = Firestore.firestore()
     
     let ACCESS_LIST_COLLECTION_NAME: String = "access-list"
@@ -12,11 +14,15 @@ class AccessListViewModel: ObservableObject{
     func listenForAccessListUpdates() {
                 AccessListService.shared.addListenerForUserUpdates() { [weak self] result in
                     DispatchQueue.main.async {
+                        
                                     switch result {
                                     case .success(let users):
                                         self?.users = users
+                                        self?.errorMessage = nil
+                                        self?.showErrorAlert = false
                                     case .failure(let error):
-                                        self?.errorMessage = "Failed to fetch food items: \(error.localizedDescription)"
+                                        self?.errorMessage = "Failed to fetch access list: \(error.localizedDescription)"
+                                        self!.showErrorAlert = true
                                         print("Error: \(error)")
                                     }
                         }
@@ -33,11 +39,14 @@ class AccessListViewModel: ObservableObject{
                     try await AccessListService.shared.deleteRequest(id: id)
                     DispatchQueue.main.async {
                         self.users.removeAll { $0.id == id }
+                        self.errorMessage=nil
+                        self.showErrorAlert=false
                     }
                     
                 } catch {
                     DispatchQueue.main.async {
-                        self.errorMessage = "Error deleting item: \(error.localizedDescription)"
+                        self.errorMessage = "Error deleting user: \(error.localizedDescription)"
+                        self.showErrorAlert=false
                     }
                 }
             }

@@ -4,6 +4,7 @@ import Firebase
 class ListOfFoodItemsViewModel:ObservableObject{
     @Published var foodItems: [FoodItem] = []
     @Published var errorMessage: String?
+    @Published var showErrorAlert: Bool = false
     
     func listenForFoodItemUpdates() {
         FoodItemService.shared.addListenerForFoodItemsUpdates() { [weak self] result in
@@ -11,8 +12,11 @@ class ListOfFoodItemsViewModel:ObservableObject{
                             switch result {
                             case .success(let items):
                                 self?.foodItems = items
+                                self?.errorMessage = nil
+                                self?.showErrorAlert = false
                             case .failure(let error):
                                 self?.errorMessage = "Failed to fetch food items: \(error.localizedDescription)"
+                                self?.showErrorAlert = true
                                 print("Error: \(error)")
                             }
                 }

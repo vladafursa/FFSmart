@@ -34,6 +34,13 @@ struct LogHistoryView: View {
         .onAppear {
            logHistoryViewModel.listenForNewActionUpdates()
        }
+        .alert(isPresented: $logHistoryViewModel.showErrorAlert) {
+            Alert(
+                title: Text("Can't show logs"),
+                message: Text(logHistoryViewModel.errorMessage ?? "An unknown error occurred"),
+                dismissButton: .default(Text("try again"))
+            )
+        }
     }
 }
 
