@@ -142,7 +142,13 @@ class LogHistoryViewModel:ObservableObject{
         }
     
     
-    
+    func formattedDate(for date: Date) -> String {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .short
+            formatter.timeZone = TimeZone.current  // Set to the current time zone
+            return formatter.string(from: date)
+        }
     
     
 }

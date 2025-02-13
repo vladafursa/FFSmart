@@ -6,22 +6,25 @@ struct HomeView: View {
         TabView {
                     ListOfFoodItemsView()
                         .tabItem {
-                            Label("Tab 1", systemImage: "1.square.fill")
+                            Label("Main", systemImage: "list.number")
                         }
+                        .foregroundColor(Color("TextColor"))
                     NewItemView()
                         .tabItem {
-                            Label("Tab 2", systemImage: "2.square.fill")
+                            Label("Add", systemImage: "plus.circle")
                         }
+                        .foregroundColor(Color("TextColor"))
                     ChangeQuantityOfFoodItemView()
                         .tabItem {
-                            Label("Tab 3", systemImage: "3.square.fill")
+                            Label("Modify", systemImage: "square.and.pencil")
                         }
-                    
+                        .foregroundColor(Color("TextColor"))
                     if role=="head-chef"{
                         LogHistoryView()
                             .tabItem {
-                                Label("Tab 4", systemImage: "4.square.fill")
+                                Label("Log", systemImage: "text.document")
                             }
+                            .foregroundColor(Color("TextColor"))
                     }
                     
                     
