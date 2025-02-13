@@ -21,34 +21,30 @@ class ChangeQuantityOfFoodItemViewModel:ObservableObject{
     
     
     func deleteItem(id: String) {
-        let db = Firestore.firestore()
-        
-        let itemRef = db.collection("food-items").document(id)
-        
-        itemRef.delete { error in
-            if let error = error {
-                print("Error deleting item: \(error)")
-            } else {
-                print("User deleted successfully")
-                self.foodItems.removeAll { $0.id == id }
+        Task{
+            do {
+                try await  FoodItemService.shared.deleteItem(id: id)
+                DispatchQueue.main.async {
+                    self.foodItems.removeAll { $0.id == id }
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.errorMessage = "Error deleting item: \(error.localizedDescription)"
+                }
             }
         }
     }
     
     
     func updateItem(id: String, newQuantity:Int) {
-        let db = Firestore.firestore()
-        
-        let itemRef = db.collection("food-items").document(id)
-        itemRef.updateData([
-            "quantity": newQuantity
-        ]) { err in
-            if let err = err {
-                print("Error updating document: \(err)")
-            } else {
-                print("Document successfully updated!")
+        Task{
+            do {
+                try await  FoodItemService.shared.updateItem(id: id, newQuantity: newQuantity)
+            } catch {
+                DispatchQueue.main.async {
+                    self.errorMessage = "Error deleting item: \(error.localizedDescription)"
+                }
             }
-            
         }
     }
     

@@ -72,6 +72,28 @@ final class FoodItemService {
        }
     
     
+    func deleteItem(id: String) async throws {
+        do{
+            let itemRef = db.collection("food-items").document(id)
+            try await itemRef.delete()
+        }
+        catch{
+            throw error
+        }
+    }
+    
+    
+    func updateItem(id: String, newQuantity:Int) async throws{
+        do{
+            let itemRef = db.collection("food-items").document(id)
+            try await itemRef.updateData([
+                "quantity": newQuantity
+            ])
+        }
+        catch{
+            throw error
+        }
+    }
     
     
     

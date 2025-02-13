@@ -25,11 +25,6 @@ class NewItemViewModel:ObservableObject{
     @Published var alertTitle: String = ""
     @Published var alertMessage: String?
     @Published var dismissMessage: String = ""
-    func addItem(item:FoodItem){
-        let db = Firestore.firestore();
-        db.collection("food-items").document().setData(["name":item.name, "quantity":item.quantity, "expiration-date":item.expirationDate]);
-        
-    }
     
     func validateForm() throws{
         if name.isEmpty || String(quantity).isEmpty{
