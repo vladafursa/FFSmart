@@ -32,7 +32,7 @@ struct LogHistoryView: View {
             }
         }
         .onAppear {
-           logHistoryViewModel.listenForActionUpdates()
+           logHistoryViewModel.listenForNewActionUpdates()
        }
     }
 }
