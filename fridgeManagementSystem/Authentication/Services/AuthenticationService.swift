@@ -73,12 +73,13 @@ final class AuthenticationService: ObservableObject {
     }
     
     
-    func register(email:String, password:String) async throws{
+    func register(email: String, password: String) async throws -> AuthDataResult {
         let result = try await auth.createUser(withEmail: email, password: password)
         DispatchQueue.main.async {
-            self.currentUser=nil
+            self.currentUser = nil
             self.userRole = nil
         }
+        return result  
     }
     
     func signOut() throws {

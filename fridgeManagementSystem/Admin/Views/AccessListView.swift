@@ -3,7 +3,6 @@ import Firebase
 import FirebaseAuth
 
 struct AccessListView: View {
-    @State private var users: [User] = []
     @StateObject private var accessViewModel = AccessListViewModel()
     @StateObject private var loginViewModel = LoginViewModel()
     
@@ -30,7 +29,7 @@ struct AccessListView: View {
                             
                             HStack {
                                 Button(action: {
-                                    accessViewModel.deleteUser(id: user.id)
+                                    accessViewModel.deleteRequest(id: user.id)
                                 }) {
                                     Text("Delete")
                                 }
