@@ -9,10 +9,9 @@ class VerifyEmailViewModel: ObservableObject {
     @Published var alertTitle: String = ""
     @Published var alertMessage: String = ""
     @Published var dismissMessage: String = ""
-    
-    
-    func resetPassword(){
-        Task{
+
+    func resetPassword() {
+        Task {
             do {
                 try await AuthenticationService.shared.forgotPassword(email: email)
                 DispatchQueue.main.async {
@@ -37,27 +36,18 @@ class VerifyEmailViewModel: ObservableObject {
             }
         }
     }
-    
-    
-    func showSuccessAlert(){
-        self.alertTitle = "Verification email was sent"
-        self.alertMessage = "Check your inbox and follow the instruction to reset your password"
-        self.showAlert = true
-        self.dismissMessage = "OK"
-    }
-   
-    func showErrorAlert(message: String){
-        self.alertTitle = "Something went wrong"
-        self.alertMessage = message
-        self.showAlert = true
-        self.dismissMessage = "try again"
-    }
-    
-}
-    
-    
-    
-        
-    
-    
 
+    func showSuccessAlert() {
+        alertTitle = "Verification email was sent"
+        alertMessage = "Check your inbox and follow the instruction to reset your password"
+        showAlert = true
+        dismissMessage = "OK"
+    }
+
+    func showErrorAlert(message: String) {
+        alertTitle = "Something went wrong"
+        alertMessage = message
+        showAlert = true
+        dismissMessage = "try again"
+    }
+}

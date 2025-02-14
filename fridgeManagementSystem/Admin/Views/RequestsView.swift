@@ -1,19 +1,19 @@
-import SwiftUI
 import Firebase
+import FirebaseAuth
 import FirebaseCore
 import FirebaseFirestore
-import FirebaseAuth
+import SwiftUI
 
 struct RequestsView: View {
     @State private var users: [User] = []
-    
+
     @StateObject private var requestsViewModel = RequestsViewModel()
     var body: some View {
-        ZStack{
+        ZStack {
             Color("BackgroundColor")
-                                          .edgesIgnoringSafeArea(.all)
-            
-            VStack{
+                .edgesIgnoringSafeArea(.all)
+
+            VStack {
                 VStack {
                     Text("Upcoming requests")
                         .font(.largeTitle)
@@ -22,54 +22,50 @@ struct RequestsView: View {
                 }
                 VStack {
                     if requestsViewModel.users.isEmpty {
-                                    Text("No upcoming requests")
-                                    .font(.title2)
-                                    .foregroundColor(Color("TextColor"))
-                                        
+                        Text("No upcoming requests")
+                            .font(.title2)
+                            .foregroundColor(Color("TextColor"))
+
                     } else {
                         List(requestsViewModel.users) { user in
                             VStack(alignment: .leading) {
-                                HStack{
-                                    VStack{
+                                HStack {
+                                    VStack {
                                         Text("\(user.name) | \(user.role)")
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                         Text("\(user.email)")
                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                        
                                     }
-                                    
+
                                     HStack {
                                         Button(action: {
                                             print("Deny tapped for \(user.id)")
                                             requestsViewModel.deleteRequest(id: user.id)
                                         }) {
-                                            Image(systemName:"minus.circle")
+                                            Image(systemName: "minus.circle")
                                                 .foregroundColor(.red)
                                         }
                                         .buttonStyle(BorderlessButtonStyle())
-                                        
+
                                         Spacer()
-                                        
+
                                         Button(action: {
                                             print("Accept tapped for \(user.id)")
                                             requestsViewModel.acceptRequest(id: user.id)
                                         }) {
-                                            Image(systemName:"plus.circle")
+                                            Image(systemName: "plus.circle")
                                                 .foregroundColor(.green)
                                         }
                                         .buttonStyle(BorderlessButtonStyle())
                                     }
                                 }
-                                
                             }
                         }
-                    
-                    .foregroundColor(Color("TextColor"))
-                                     
-                                        .background(Color("BackgroundColor"))
-                                        .scrollContentBackground(.hidden)
-                    }
 
+                        .foregroundColor(Color("TextColor"))
+                        .background(Color("BackgroundColor"))
+                        .scrollContentBackground(.hidden)
+                    }
                 }
             }
         }
@@ -83,13 +79,8 @@ struct RequestsView: View {
                 dismissButton: .default(Text("try again"))
             )
         }
-        NavigationLink(destination: AccessListView()){
-            
-        }
+        NavigationLink(destination: AccessListView()) {}
     }
-   
-    
-    
 }
 
 #Preview {

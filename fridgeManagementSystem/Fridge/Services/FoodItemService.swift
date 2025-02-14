@@ -1,7 +1,5 @@
 import Firebase
 
-
-
 enum itemError: Error {
     case sameItemAlreadyExists
     var localisedDescription: String {
@@ -12,11 +10,19 @@ enum itemError: Error {
     }
 }
 
-final class FoodItemService {
+protocol FoodItemServiceProtocol {
+    func addListenerForFoodItemsUpdates(completion: @escaping (Result<[FoodItem], Error>) -> Void)
+    func addItem(item: FoodItem) async throws
+    func checkIfFoodItemExists(name: String, expirationDate: Date) async throws -> Bool
+    func deleteItem(id: String) async throws
+    func updateItem(id: String, newQuantity: Int) async throws
+}
+
+final class FoodItemService: FoodItemServiceProtocol {
     private let db = Firestore.firestore()
     static let shared = FoodItemService()
     private init() {}
-    
+
     func addListenerForFoodItemsUpdates(completion: @escaping (Result<[FoodItem], Error>) -> Void) {
         db.collection("food-items").addSnapshotListener { snapshot, error in
             if let error = error {
@@ -27,74 +33,62 @@ final class FoodItemService {
                 completion(.success([]))
                 return
             }
-                let items: [FoodItem] = documents.map { document in
+            let items: [FoodItem] = documents.map { document in
                 let data = document.data()
                 let name = data["name"] as! String
                 let quantity = data["quantity"] as! Int
                 let expirationDateTimestamp = data["expiration-date"] as! Timestamp
                 let expirationDate = expirationDateTimestamp.dateValue()
-                
+
                 return FoodItem(id: document.documentID, name: name, quantity: quantity, expirationDate: expirationDate)
             }
             completion(.success(items))
         }
     }
-    
-    
-    func addItem(item:FoodItem) async throws {
-        do{
+
+    func addItem(item: FoodItem) async throws {
+        do {
             let exists = try await checkIfFoodItemExists(name: item.name, expirationDate: item.expirationDate)
-            if exists{
+            if exists {
                 throw itemError.sameItemAlreadyExists
+            } else {
+                try await db.collection("food-items").document().setData(["name": item.name, "quantity": item.quantity, "expiration-date": item.expirationDate])
             }
-            else{
-                try await db.collection("food-items").document().setData(["name":item.name, "quantity":item.quantity, "expiration-date":item.expirationDate]);
-            }
-        }
-        catch{
+        } catch {
             throw error
         }
     }
-    
-    
+
     func checkIfFoodItemExists(name: String, expirationDate: Date) async throws -> Bool {
         let query =
-           db.collection("food-items")
-               .whereField("name", isEqualTo: name)
-               .whereField("expiration-date", isEqualTo: expirationDate)
-        do{
+            db.collection("food-items")
+                .whereField("name", isEqualTo: name)
+                .whereField("expiration-date", isEqualTo: expirationDate)
+        do {
             let snapshot = try await query.getDocuments()
             return !snapshot.documents.isEmpty
-        }
-        catch{
+        } catch {
             return false
         }
-       }
-    
-    
+    }
+
     func deleteItem(id: String) async throws {
-        do{
+        do {
             let itemRef = db.collection("food-items").document(id)
             try await itemRef.delete()
-        }
-        catch{
+        } catch {
             throw error
         }
     }
-    
-    
-    func updateItem(id: String, newQuantity:Int) async throws{
-        do{
+
+    func updateItem(id: String, newQuantity: Int) async throws {
+        do {
             let itemRef = db.collection("food-items").document(id)
             try await itemRef.updateData([
-                "quantity": newQuantity
+                "quantity": newQuantity,
             ])
-        }
-        catch{
+        } catch {
             throw error
         }
     }
-    
-    
-    
 }

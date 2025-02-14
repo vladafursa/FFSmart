@@ -7,7 +7,7 @@ class LoginViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var showErrorAlert: Bool = false
     @Published var isLoggedIn: Bool = false
-    
+
     func login() {
         print("Login initiated with email: \(email)")
         Task {
@@ -39,20 +39,17 @@ class LoginViewModel: ObservableObject {
             }
         }
     }
-    
-    
-    
-    func logout(){
-        Task{
-            do{
+
+    func logout() {
+        Task {
+            do {
                 try AuthenticationService.shared.signOut()
                 DispatchQueue.main.async {
                     self.isLoggedIn = false
                     self.errorMessage = nil
                     self.showErrorAlert = false
                 }
-            }
-            catch{
+            } catch {
                 DispatchQueue.main.async {
                     self.errorMessage = error.localizedDescription
                     self.showErrorAlert = true
@@ -60,27 +57,14 @@ class LoginViewModel: ObservableObject {
             }
         }
     }
-    
-    
-    
-    
-    func resetPassword(email: String){
-        Task{
-            do{
+
+    func resetPassword(email: String) {
+        Task {
+            do {
                 try await AuthenticationService.shared.forgotPassword(email: email)
-            }
-            catch{
+            } catch {
                 print(error.localizedDescription)
             }
         }
     }
-    
-    
 }
-    
-    
-    
-        
-    
-    
-

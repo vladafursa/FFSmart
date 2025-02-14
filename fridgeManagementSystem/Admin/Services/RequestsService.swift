@@ -1,51 +1,44 @@
 import Firebase
+
 final class RequestsService {
     private let db = Firestore.firestore()
     static let shared = RequestsService()
     private init() {}
-  
-    
+
     func addListenerForUserUpdates(completion: @escaping (Result<[User], Error>) -> Void) {
-            db.collection("requests").addSnapshotListener { snapshot, error in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                guard let documents = snapshot?.documents else {
-                    completion(.success([]))
-                    return
-                }
-                    let users: [User] = documents.map { document in
-                    let data = document.data()
-                    let name = data["name"] as! String
-                    let email = data["email"] as! String
-                    let password = data["password"] as! String
-                    let role = data["role"] as! String
-                    
-                    return User(id: document.documentID, email: email, name: name, password: password, role: role)
-                }
-                completion(.success(users))
+        db.collection("requests").addSnapshotListener { snapshot, error in
+            if let error = error {
+                completion(.failure(error))
+                return
             }
+            guard let documents = snapshot?.documents else {
+                completion(.success([]))
+                return
+            }
+            let users: [User] = documents.map { document in
+                let data = document.data()
+                let name = data["name"] as! String
+                let email = data["email"] as! String
+                let password = data["password"] as! String
+                let role = data["role"] as! String
+
+                return User(id: document.documentID, email: email, name: name, password: password, role: role)
+            }
+            completion(.success(users))
         }
-    
-    
+    }
+
     func deleteRequest(id: String) async throws {
-        do{
+        do {
             let userRef = db.collection("requests").document(id)
             try await userRef.delete()
-        }
-        catch{
+        } catch {
             throw error
         }
     }
-    
-    
-    
-    
-    func addDataToAccessList(){
-        
-    }
-    
+
+    func addDataToAccessList() {}
+
     func acceptRequest(id: String) async throws {
         let db = Firestore.firestore()
         let sourceDocumentRef = db.collection("requests").document(id)
@@ -54,7 +47,8 @@ final class RequestsService {
         let documentSnapshot = try await sourceDocumentRef.getDocument()
         guard let data = documentSnapshot.data(),
               let email = data["email"] as? String,
-              let password = data["password"] as? String else {
+              let password = data["password"] as? String
+        else {
             throw NSError(domain: "AcceptRequestError", code: 404, userInfo: [NSLocalizedDescriptionKey: "Document not found or missing fields."])
         }
 
@@ -73,14 +67,4 @@ final class RequestsService {
         try await sourceDocumentRef.delete()
         print("Document successfully copied to access-list and request deleted.")
     }
-
 }
-
-    
-    
-    
-    
-    
-    
-    
-

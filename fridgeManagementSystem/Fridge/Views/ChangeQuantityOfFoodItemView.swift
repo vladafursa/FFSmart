@@ -1,32 +1,33 @@
-import SwiftUI
 import Firebase
 import FirebaseAuth
 import Foundation
+import SwiftUI
+
 struct ChangeQuantityOfFoodItemView: View {
     @StateObject private var changeItemViewModel = ChangeQuantityOfFoodItemViewModel()
     @StateObject private var logViewModel = LogHistoryViewModel()
-    @State private var performedAction:String = ""
+    @State private var performedAction: String = ""
     var body: some View {
-        ZStack{
+        ZStack {
             Color("BackgroundColor")
                 .edgesIgnoringSafeArea(.all)
-        ScrollView{
-            VStack {
-                                    Text("Modify inventory")
-                                        .font(.largeTitle)
-                                        .foregroundColor(Color("TextColor"))
-                                        .bold()
-                                }
+            ScrollView {
+                VStack {
+                    Text("Modify inventory")
+                        .font(.largeTitle)
+                        .foregroundColor(Color("TextColor"))
+                        .bold()
+                }
                 VStack {
                     ForEach($changeItemViewModel.foodItems) { $foodItem in
                         HStack {
-                            VStack{
+                            VStack {
                                 Text("\(foodItem.name)")
                                     .foregroundColor(Color("TextColor"))
                                 Text("\(changeItemViewModel.formattedDate(for: foodItem.expirationDate))")
                                     .foregroundColor(Color("TextColor"))
                             }
-                            HStack{
+                            HStack {
                                 TextField("Quantity", value: $foodItem.quantity, format: .number)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                                     .foregroundColor(Color("TextColor"))
@@ -36,26 +37,24 @@ struct ChangeQuantityOfFoodItemView: View {
                                     .onChange(of: foodItem.quantity) { oldValue, newValue in
                                         print("Quantity changed from \(oldValue) to \(newValue)")
                                         changeItemViewModel.updateItem(id: foodItem.id, newQuantity: newValue)
-                                        
+
                                         let difference = newValue - oldValue
                                         let changedItem = FoodItem(id: foodItem.id, name: foodItem.name, quantity: abs(difference), expirationDate: foodItem.expirationDate)
-                                        if difference<0{
-                                            performedAction="removed"
+                                        if difference < 0 {
+                                            performedAction = "removed"
+                                        } else {
+                                            performedAction = "inserted"
                                         }
-                                        else{
-                                            performedAction="inserted"
-                                        }
-                                        
+
                                         logViewModel.addLogAfterDelay(item: changedItem, difference: difference, action: performedAction)
                                     }
                             }
-                            
+
                             HStack {
                                 Button(action: {
                                     foodItem.quantity += 1
                                 }) {
                                     Text("+")
-
                                 }
                                 Spacer()
                                 Button(action: {
@@ -63,13 +62,13 @@ struct ChangeQuantityOfFoodItemView: View {
                                 }) {
                                     Text("-")
                                 }
-                                
+
                                 Spacer()
                                 Button(action: {
                                     changeItemViewModel.deleteItem(id: foodItem.id)
                                     logViewModel.addLog(item: foodItem, action: "deleted")
                                 }) {
-                                    Image(systemName:"trash.fill")
+                                    Image(systemName: "trash.fill")
                                 }
                                 .buttonStyle(BorderlessButtonStyle())
                             }
@@ -79,9 +78,8 @@ struct ChangeQuantityOfFoodItemView: View {
                     .background(Color.white)
                     .cornerRadius(10)
                 }
-            
             }
-        .padding()
+            .padding()
         }
         .onAppear {
             changeItemViewModel.listenForFoodItemUpdates()
@@ -94,8 +92,6 @@ struct ChangeQuantityOfFoodItemView: View {
             )
         }
     }
-    
-    
 }
 
 #Preview {

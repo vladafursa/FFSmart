@@ -8,7 +8,7 @@ struct LoginView: View {
             ZStack {
                 Color("BackgroundColor")
                     .edgesIgnoringSafeArea(.all)
-                
+
                 VStack {
                     Text("Login")
                         .font(.largeTitle)
@@ -17,7 +17,7 @@ struct LoginView: View {
                         .padding()
                     Spacer()
                 }
-                
+
                 VStack(spacing: 15) {
                     VStack(spacing: 35) {
                         TextField("email", text: $viewModel.email)
@@ -31,7 +31,7 @@ struct LoginView: View {
                     }
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 300)
-                    
+
                     HStack {
                         Spacer()
                         NavigationLink(destination: VerifyEmailView()) {
@@ -40,7 +40,7 @@ struct LoginView: View {
                         }
                         .padding(.trailing, 50)
                     }
-                    
+
                     Button(action: { viewModel.login() }) {
                         Text("Submit")
                     }
@@ -52,7 +52,7 @@ struct LoginView: View {
                     .background(Color("ButtonColor"))
                     .cornerRadius(5)
                     .padding(20)
-                    
+
                     HStack {
                         Text("Not registered yet?")
                             .foregroundColor(Color("TextColor"))
@@ -64,15 +64,15 @@ struct LoginView: View {
                     .padding(20)
                 }
             }
-            
+
             .navigationDestination(isPresented: $viewModel.isLoggedIn) {
                 if authService.userRole == "admin" {
-                                    AccessListView()
-                                } else {
-                                    HomeView(role:authService.userRole ?? "")
-                                }
+                    AccessListView()
+                } else {
+                    HomeView(role: authService.userRole ?? "")
                 }
-       
+            }
+
         }.onAppear {
             viewModel.logout()
         }
@@ -82,7 +82,6 @@ struct LoginView: View {
                 message: Text(viewModel.errorMessage ?? "An unknown error occurred"),
                 dismissButton: .default(Text("try again"))
             )
-            
         }
         .navigationBarBackButtonHidden(true)
     }

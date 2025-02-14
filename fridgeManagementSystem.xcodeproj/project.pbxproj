@@ -47,23 +47,6 @@
 		60DB1F9B2D5DB8A90052139B /* AuthenticationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AuthenticationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		60DB1FA72D5DB8BA0052139B /* Exceptions for "fridgeManagementSystemTests" folder in "fridgeManagementSystemTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				AuthenticationTests/AuthenticationTests.swift,
-			);
-			target = 60D402E92D5AD9CC00C4D033 /* fridgeManagementSystemTests */;
-		};
-		60DB1FA82D5DB8BA0052139B /* Exceptions for "fridgeManagementSystemTests" folder in "AuthenticationTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				AuthenticationTests/AuthenticationTests.swift,
-			);
-			target = 60DB1F9A2D5DB8A90052139B /* AuthenticationTests */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		60D402DC2D5AD9C900C4D033 /* fridgeManagementSystem */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -72,10 +55,6 @@
 		};
 		60D402ED2D5AD9CC00C4D033 /* fridgeManagementSystemTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				60DB1FA72D5DB8BA0052139B /* Exceptions for "fridgeManagementSystemTests" folder in "fridgeManagementSystemTests" target */,
-				60DB1FA82D5DB8BA0052139B /* Exceptions for "fridgeManagementSystemTests" folder in "AuthenticationTests" target */,
-			);
 			path = fridgeManagementSystemTests;
 			sourceTree = "<group>";
 		};

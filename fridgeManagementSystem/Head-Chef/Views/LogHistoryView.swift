@@ -1,39 +1,38 @@
-import SwiftUI
 import Firebase
-
+import SwiftUI
 
 struct LogHistoryView: View {
     @State private var Actions: [Action] = []
     @StateObject private var logHistoryViewModel = LogHistoryViewModel()
+
     var body: some View {
-        ZStack{
+        ZStack {
             Color("BackgroundColor")
                 .edgesIgnoringSafeArea(.all)
-            VStack{
+
+            VStack {
                 VStack {
                     Text("Log history")
                         .font(.largeTitle)
                         .foregroundColor(Color("TextColor"))
                         .bold()
                 }
-                
-                VStack{
-                    List(logHistoryViewModel.Actions) { action in
-                        VStack(alignment: .leading) {
-                            Text("\(action.username) \(action.action) \(action.quantity) \(action.name) \(logHistoryViewModel.formattedDate(for:action.time))")
-                        }
-                        .listRowBackground(Color.clear)
+
+                List(logHistoryViewModel.Actions) { action in
+                    VStack(alignment: .leading) {
+                        Text("\(action.username) \(action.action) \(action.quantity) \(action.name) \(logHistoryViewModel.formattedDate(for: action.time))")
                     }
-                    .foregroundColor(Color("TextColor"))
-                    .background(Color("BackgroundColor"))
-                    .scrollContentBackground(.hidden)
+                    .listRowBackground(Color.clear)
                 }
-                
+                .foregroundColor(Color("TextColor"))
+                .scrollContentBackground(.hidden)
+                .background(Color("BackgroundColor"))
             }
+            .padding()
         }
         .onAppear {
-           logHistoryViewModel.listenForNewActionUpdates()
-       }
+            logHistoryViewModel.listenForNewActionUpdates()
+        }
         .alert(isPresented: $logHistoryViewModel.showErrorAlert) {
             Alert(
                 title: Text("Can't show logs"),

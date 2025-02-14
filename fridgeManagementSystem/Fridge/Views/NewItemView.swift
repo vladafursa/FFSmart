@@ -1,26 +1,27 @@
-import SwiftUI
 import Firebase
-import Foundation
 import FirebaseAuth
+import Foundation
+import SwiftUI
+
 struct NewItemView: View {
     @StateObject private var newItemViewModel = NewItemViewModel()
     @StateObject private var logViewModel = LogHistoryViewModel()
     var body: some View {
-        ZStack{
+        ZStack {
             Color("BackgroundColor")
                 .edgesIgnoringSafeArea(.all)
-            
-                 VStack{
-                            Text("New item")
-                                .font(.largeTitle)
-                                .foregroundColor(Color("TextColor"))
-                                .bold()
-                                .padding()
-                            Spacer()
-                        }
-            
-            VStack{
-                HStack{
+
+            VStack {
+                Text("New item")
+                    .font(.largeTitle)
+                    .foregroundColor(Color("TextColor"))
+                    .bold()
+                    .padding()
+                Spacer()
+            }
+
+            VStack {
+                HStack {
                     Text("Name")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(Color("TextColor"))
@@ -28,7 +29,6 @@ struct NewItemView: View {
                     TextField(
                         "name",
                         text: $newItemViewModel.name
-                        
                     )
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding()
@@ -37,7 +37,7 @@ struct NewItemView: View {
                     .disableAutocorrection(true)
                     .autocapitalization(.none)
                 }
-                HStack{
+                HStack {
                     Text("quantity")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(Color("TextColor"))
@@ -49,26 +49,26 @@ struct NewItemView: View {
                         .font(.title2)
                         .keyboardType(.numberPad)
                 }
-                HStack{
+                HStack {
                     Text("Expiration date")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(Color("TextColor"))
                         .font(.title2)
                     DatePicker("", selection: $newItemViewModel.date, displayedComponents: .date)
                         .onChange(of: newItemViewModel.date) { newDate in
-                                            newItemViewModel.setMidnightDate(newDate)
-                                        }
+                            newItemViewModel.setMidnightDate(newDate)
+                        }
                         .frame(maxWidth: .infinity, alignment: .center)
                         .labelsHidden()
                         .datePickerStyle(.compact)
                 }
                 Button(action: {
-                    let item =  FoodItem(id:UUID().uuidString, name:self.newItemViewModel.name,quantity:self.newItemViewModel.quantity, expirationDate: self.newItemViewModel.date)
-                    
+                    let item = FoodItem(id: UUID().uuidString, name: self.newItemViewModel.name, quantity: self.newItemViewModel.quantity, expirationDate: self.newItemViewModel.date)
+
                     newItemViewModel.addNewItem()
                     logViewModel.addLog(item: item, action: "added")
-                    
-                }){
+
+                }) {
                     Text("Save")
                 }
                 .font(.title2)
@@ -81,21 +81,17 @@ struct NewItemView: View {
                 .padding(20)
             }
             .padding()
-                                    .frame(width: 380, height: 350)
-                                    
-            
-            
+            .frame(width: 380, height: 350)
         }
         .alert(isPresented: $newItemViewModel.showAlert) {
-                    Alert(
-                        title: Text(newItemViewModel.alertTitle),
-                        message: Text(newItemViewModel.alertMessage!),
-                        dismissButton: .default(Text(newItemViewModel.dismissMessage))
-                    )
-                }
+            Alert(
+                title: Text(newItemViewModel.alertTitle),
+                message: Text(newItemViewModel.alertMessage!),
+                dismissButton: .default(Text(newItemViewModel.dismissMessage))
+            )
+        }
     }
 }
-    
 
 #Preview {
     NewItemView()

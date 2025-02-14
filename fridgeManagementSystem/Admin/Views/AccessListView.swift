@@ -1,16 +1,16 @@
-import SwiftUI
 import Firebase
 import FirebaseAuth
+import SwiftUI
 
 struct AccessListView: View {
     @StateObject private var accessViewModel = AccessListViewModel()
     @StateObject private var loginViewModel = LoginViewModel()
-    
+
     var body: some View {
         ZStack {
             Color("BackgroundColor")
                 .edgesIgnoringSafeArea(.all)
-            
+
             VStack {
                 Text("Access list")
                     .font(.largeTitle)
@@ -26,7 +26,7 @@ struct AccessListView: View {
                                 Text("\(user.email)")
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
-                            
+
                             HStack {
                                 Button(action: {
                                     accessViewModel.deleteRequest(id: user.id)
@@ -45,8 +45,7 @@ struct AccessListView: View {
                 .foregroundColor(Color("TextColor"))
                 .background(Color("BackgroundColor"))
                 .scrollContentBackground(.hidden)
-                
-              
+
                 NavigationLink(destination: RequestsView()) {
                     Text("view requests")
                         .font(.title2)

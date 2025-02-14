@@ -3,27 +3,24 @@ import SwiftUI
 struct VerifyEmailView: View {
     @StateObject private var verifyEmailViewModel = VerifyEmailViewModel()
     var body: some View {
-        ZStack{
+        ZStack {
             Color("BackgroundColor")
                 .edgesIgnoringSafeArea(.all)
-            
-            VStack{
+
+            VStack {
                 Text("You need to verify email to change password")
                     .font(.largeTitle)
                     .foregroundColor(Color("TextColor"))
                     .bold()
                     .padding()
                 Spacer()
-                
             }
-            
-            VStack{
-                
-                VStack{
+
+            VStack {
+                VStack {
                     TextField(
                         "email",
                         text: $verifyEmailViewModel.email
-                        
                     )
                     .font(.title2)
                     .disableAutocorrection(true)
@@ -31,9 +28,9 @@ struct VerifyEmailView: View {
                 }
                 .textFieldStyle(.roundedBorder)
                 .frame(maxWidth: 300)
-               
-                VStack(spacing: 45){
-                    Button(action: {verifyEmailViewModel.resetPassword()}) {
+
+                VStack(spacing: 45) {
+                    Button(action: { verifyEmailViewModel.resetPassword() }) {
                         Text("Verify")
                             .font(.title2)
                             .foregroundColor(.white)
@@ -44,18 +41,12 @@ struct VerifyEmailView: View {
                             .cornerRadius(5)
                             .padding(20)
                     }
-                        
                 }
             }
-            
-            
-            NavigationLink(destination: LoginView()){
-                
-            }
+
+            NavigationLink(destination: LoginView()) {}
         }
-        
-        
-        
+
         .alert(isPresented: $verifyEmailViewModel.showAlert) {
             Alert(
                 title: Text(verifyEmailViewModel.alertTitle),
@@ -63,16 +54,12 @@ struct VerifyEmailView: View {
                 dismissButton: .default(Text(verifyEmailViewModel.dismissMessage))
             )
         }
-        
-        
-        
+
         NavigationLink(destination: LoginView(), isActive: $verifyEmailViewModel.verificationLinkSent) {
             EmptyView()
-                       }
-        
+        }
     }
 }
-
 
 #Preview {
     VerifyEmailView()

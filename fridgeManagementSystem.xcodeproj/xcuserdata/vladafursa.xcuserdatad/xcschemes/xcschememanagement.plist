@@ -4,10 +4,38 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Promises (Playground).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>fridgeManagementSystem.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>60D402D92D5AD9C900C4D033</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>60D402E92D5AD9CC00C4D033</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>60D402F32D5AD9CC00C4D033</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>60DB1F9A2D5DB8A90052139B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
