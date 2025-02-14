@@ -19,12 +19,12 @@ protocol FoodItemServiceProtocol {
 }
 
 final class FoodItemService: FoodItemServiceProtocol {
-    private let db = Firestore.firestore()
+    private let database = Firestore.firestore()
     static let shared = FoodItemService()
     private init() {}
 
     func addListenerForFoodItemsUpdates(completion: @escaping (Result<[FoodItem], Error>) -> Void) {
-        db.collection("food-items").addSnapshotListener { snapshot, error in
+        database.collection("food-items").addSnapshotListener { snapshot, error in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -52,7 +52,7 @@ final class FoodItemService: FoodItemServiceProtocol {
             if exists {
                 throw itemError.sameItemAlreadyExists
             } else {
-                try await db.collection("food-items").document().setData(["name": item.name, "quantity": item.quantity, "expiration-date": item.expirationDate])
+                try await database.collection("food-items").document().setData(["name": item.name, "quantity": item.quantity, "expiration-date": item.expirationDate])
             }
         } catch {
             throw error
@@ -61,7 +61,7 @@ final class FoodItemService: FoodItemServiceProtocol {
 
     func checkIfFoodItemExists(name: String, expirationDate: Date) async throws -> Bool {
         let query =
-            db.collection("food-items")
+            database.collection("food-items")
                 .whereField("name", isEqualTo: name)
                 .whereField("expiration-date", isEqualTo: expirationDate)
         do {
@@ -74,7 +74,7 @@ final class FoodItemService: FoodItemServiceProtocol {
 
     func deleteItem(id: String) async throws {
         do {
-            let itemRef = db.collection("food-items").document(id)
+            let itemRef = database.collection("food-items").document(id)
             try await itemRef.delete()
         } catch {
             throw error
@@ -83,7 +83,7 @@ final class FoodItemService: FoodItemServiceProtocol {
 
     func updateItem(id: String, newQuantity: Int) async throws {
         do {
-            let itemRef = db.collection("food-items").document(id)
+            let itemRef = database.collection("food-items").document(id)
             try await itemRef.updateData([
                 "quantity": newQuantity,
             ])

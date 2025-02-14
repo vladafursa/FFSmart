@@ -15,7 +15,7 @@ enum registerError: Error {
 }
 
 final class RegisterService {
-    private let db = Firestore.firestore()
+    private let database = Firestore.firestore()
 
     static let shared = RegisterService()
     let ACCESS_LIST_COLLECTION_NAME: String = "access-list"
@@ -33,7 +33,7 @@ final class RegisterService {
                 if submittedRequest {
                     throw registerError.userHasRequestedRegistration
                 } else {
-                    try await db.collection("requests").document().setData(["email": email, "name": name, "password": password, "role": role])
+                    try await database.collection("requests").document().setData(["email": email, "name": name, "password": password, "role": role])
                 }
             }
         } catch {
@@ -50,7 +50,7 @@ final class RegisterService {
     }
 
     func isUserPresentInDatabase(collection: String, email: String) async throws -> Bool {
-        let query = db.collection(collection).whereField("email", isEqualTo: email)
+        let query = database.collection(collection).whereField("email", isEqualTo: email)
         do {
             let snapshot = try await query.getDocuments()
             return !snapshot.documents.isEmpty

@@ -1,12 +1,12 @@
 import Firebase
 
 final class AccessListService {
-    private let db = Firestore.firestore()
+    private let database = Firestore.firestore()
     static let shared = AccessListService()
     private init() {}
 
     func addListenerForUserUpdates(completion: @escaping (Result<[User], Error>) -> Void) {
-        db.collection("access-list").addSnapshotListener { snapshot, error in
+        database.collection("access-list").addSnapshotListener { snapshot, error in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -50,7 +50,7 @@ final class AccessListService {
 
     func deleteRequest(id: String) async throws {
         do {
-            let userRef = db.collection("access-list").document(id)
+            let userRef = database.collection("access-list").document(id)
             deleteUserFromAuthenticationAsAdmin(id: id)
             try await userRef.delete()
         } catch {

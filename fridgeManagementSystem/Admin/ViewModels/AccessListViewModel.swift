@@ -6,10 +6,6 @@ class AccessListViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var showErrorAlert: Bool = false
 
-    private let db = Firestore.firestore()
-
-    let ACCESS_LIST_COLLECTION_NAME: String = "access-list"
-
     func listenForAccessListUpdates() {
         AccessListService.shared.addListenerForUserUpdates { [weak self] result in
             DispatchQueue.main.async {

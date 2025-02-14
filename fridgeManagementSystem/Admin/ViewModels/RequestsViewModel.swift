@@ -7,8 +7,6 @@ class RequestsViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var showErrorAlert: Bool = false
 
-    private let db = Firestore.firestore()
-
     func deleteRequest(id: String) {
         Task {
             do {

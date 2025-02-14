@@ -73,7 +73,7 @@ final class LogService {
                     "action": action,
                     "quantity": item.quantity,
                     "what": item.name,
-                    "when": currentDate,
+                    "when": currentDate
                 ]
 
                 self.db.collection("log-history").document().setData(actionData) { error in
